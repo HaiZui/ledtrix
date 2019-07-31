@@ -7,4 +7,4 @@ def create_screen():
 		return VirtualScreen(width=config.screen_w,height=config.screen_h)
 	else:
 		from ledtrix.screen.screen import Screen
-		return Screen()
+		return Screen(width=config.screen_w,height=config.screen_h)

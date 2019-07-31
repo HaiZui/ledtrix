@@ -11,7 +11,7 @@ gallery = Gallery(screen, "examples/gallery")
 
 while True:
 	if config.virtual_hardware:
-		pygame.time.wait(10)
+		pygame.time.wait(1)
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.display.quit(), sys.exit()
