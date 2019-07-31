@@ -19,9 +19,9 @@ class Screen(AbstractScreen):
 	def update(self):
 		for y in range(self.height):
 			for x in range(self.width):
-				if y % 2 == 0:
-					self.strip.setPixelColor(y * self.width + x, self.pixel[x][y])
-				else: self.strip.setPixelColor(y * self.width + self.width - 1 - x, self.pixel[x][y])
+					if y % 2 == 0:
+						self.strip.setPixelColor(y * self.width + x, self.pixel[x][y])
+					else: self.strip.setPixelColor(y * self.width + self.width - 1 - x, self.pixel[x][y])
 		self.strip.show()
 
 	def update_brightness(self):

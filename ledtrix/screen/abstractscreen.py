@@ -1,8 +1,8 @@
-import helpers
+import ledtrix.helpers as helpers
 import time
 
 class AbstractScreen(object):
-	def __init__(self, width = 16, height = 16):
+	def __init__(self, width = 30, height = 20):
 		self.width = width
 		self.height = height
 
