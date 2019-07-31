@@ -14,8 +14,6 @@ class VirtualScreen(AbstractScreen):
 		self.surface = pygame.Surface(self.screen.get_size())	
 				
 	def update(self):
-		image = Image.fromarray(self.pixel.astype('uint8'))
-		image.save('test.png')
 		for x in range(len(self.pixel)):
 			for y in range(len(self.pixel[x])):
 				if x <= self.height and y <= self.width:

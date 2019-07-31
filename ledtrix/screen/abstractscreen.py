@@ -6,11 +6,11 @@ class AbstractScreen(object):
 		self.width = width
 		self.height = height
 
-		self.pixel = [[helpers.Color(0,0,0) for y in range(height)] for x in range(width)]
+		self.pixel = [[(0,0,0) for y in range(height)] for x in range(width)]
 	
-	def clear(self, color = helpers.Color(0,0,0)):
-		for x in range(self.width):
-			for y in range(self.height):
+	def clear(self, color = (0,0,0)):
+		for x in range(len(self.pixel)):
+			for y in range(len(self.pixel[0])):				
 				self.pixel[x][y] = color
 
 	def update(self):
