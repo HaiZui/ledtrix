@@ -10,7 +10,7 @@ def int_to_rgb_color(c):
 	b =  c & 255
 	g = (c >> 8) & 255
 	r = (c >> 16) & 255
-	return RGBColor(r, g, b)
+	return (r, g, b)
 
 Point = collections.namedtuple('Point', 'x y')
 

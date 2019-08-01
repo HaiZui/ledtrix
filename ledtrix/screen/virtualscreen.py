@@ -16,10 +16,10 @@ class VirtualScreen(AbstractScreen):
 	def update(self):
 		for x in range(len(self.pixel)):
 			for y in range(len(self.pixel[x])):
-				if x <= self.height and y <= self.width:
+				if x <= self.width and y <= self.height:
 					x_coor = x
-					y_coor = y
-					pygame.draw.rect(self.surface, tuple(self.pixel[x][y]), ((y_coor * self.pixel_size, x_coor * self.pixel_size), (((y_coor+1) * self.pixel_size), (x_coor+1) * self.pixel_size)))
+					y_coor = self.height - y
+					pygame.draw.rect(self.surface, tuple(self.pixel[x][y]), (x_coor * self.pixel_size, (y_coor - 1)*self.pixel_size, self.pixel_size, self.pixel_size))
 
 		self.screen.blit(self.surface, (0, 0))
 		pygame.display.flip()

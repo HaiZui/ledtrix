@@ -8,14 +8,30 @@ def get_image_array(image_path):
     pixel_values = list(image.getdata())
     if image.mode == 'RGB':
         channels = 3
-    if image.mode == 'RGBA':
+    elif image.mode == 'RGBA':
         channels = 4
     else:
+        print(image_path)
         print("Unknown mode: %s" % image.mode)
         return None
     pixel_values = np.array(pixel_values).reshape((height, width, channels))
-    pixel_values = np.delete(pixel_values, 3, axis=2)
+    # Remove alfa channel if present
+    if channels == 4:
+        pixel_values = np.delete(pixel_values, 3, axis=2)
+    # Flip y-dimension
+    pixel_values = np.flip(pixel_values, axis=0)
+    # Swap x and y axis
+    pixel_values = np.swapaxes(pixel_values, 0, 1)
+    # Now the image can be accessed as pixel_values[x][y], where origo is at left bottom corner
     return pixel_values
+
+def correct_pillow_axis(pixel_values):
+    # Flip y-dimension
+    pixel_values = np.flip(pixel_values, axis=0)
+    # Swap x and y axis
+    pixel_values = np.swapaxes(pixel_values, 0, 1)
+    return pixel_values
+
 
 def read_image(image_path):
     """Get unprocesessed image"""

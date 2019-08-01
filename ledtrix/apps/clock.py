@@ -8,6 +8,7 @@ import numpy as np
 from PIL import ImageDraw, ImageFont, Image
 from ledtrix.helpers import *
 from ledtrix.apps import Module
+from ledtrix.images import correct_pillow_axis
 
 class Clock(Module):
 	def __init__(self, screen):
@@ -30,6 +31,7 @@ class Clock(Module):
 		d.text((0,0), current_time, fill=color, font=font)
 		pixel_values = list(img.getdata())
 		pixel_values = np.array(pixel_values).reshape((height, width, 3))
+		pixel_values = correct_pillow_axis(pixel_values)
 		self.screen.pixel = pixel_values
 			
 

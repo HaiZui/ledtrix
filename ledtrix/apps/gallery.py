@@ -24,8 +24,6 @@ class Gallery(Module):
 		self.pos = 0
 		self.load_image()
 		self.screen.pixel = self.frames[0]
-		testimage = Image.fromarray(self.frames[0].astype('uint8'))
-		testimage.save('test2.png')
 		self.screen.update()
 		
 		self.start()

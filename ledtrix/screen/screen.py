@@ -15,7 +15,7 @@ class Screen(AbstractScreen):
 		instance = self	
 	
 	def update(self):
-		print("createing screen sized x={}, y={}".format(self.width, self.height))	
+		print("creating screen sized x={}, y={}".format(self.width, self.height))	
 		print("Image size: ", len(self.pixel), len(self.pixel[0]))
 		for y in range(self.height):
 			for x in range(self.width):
