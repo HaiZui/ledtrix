@@ -5,9 +5,9 @@ class AbstractScreen(object):
 	def __init__(self, width = 30, height = 20):
 		self.width = width
 		self.height = height
-
 		self.pixel = [[(0,0,0) for y in range(height)] for x in range(width)]
-	
+		self.initial_pixel = [[(0,0,0) for y in range(height)] for x in range(width)]
+
 	def clear(self, color = (0,0,0)):
 		for x in range(len(self.pixel)):
 			for y in range(len(self.pixel[0])):				

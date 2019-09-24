@@ -26,10 +26,11 @@ class Gallery(Module):
 		self.pos = 0
 		self.load_image()
 		self.screen.pixel = self.frames[0]
+		self.screen.initial_pixel = self.frames[0]
 		self.screen.update()
 		self.interval = self.load_interval() 
 		self.tick_interval = self.load_tick_interval()
-		self.effects = [(EffectRotate(angle=10),{})]
+		self.effects = [(EffectRotate(speed=10.),{})]
 
 		self.start_time = time.time()
 		
@@ -40,6 +41,7 @@ class Gallery(Module):
 		self.pos = (self.pos + 1) % len(self.filenames)
 		self.load_image()
 		self.screen.pixel = self.frames[0]
+		self.screen.initial_pixel = self.frames[0]
 		self.screen.update() 
 
 	def load_filenames(self, location):

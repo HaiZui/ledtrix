@@ -25,7 +25,10 @@ class Module(object):
  		
 	def process_effects(self):
 		for effect, kwargs in self.effects:
-			self.screen.pixel = effect.process(self.screen.pixel, **kwargs)
+			if effect.use_last_frame == True:
+				self.screen.pixel = effect.process(self.screen.pixel, **kwargs)
+			elif effect.use_last_frame == False:
+				self.screen.pixel = effect.process(self.screen.initial_pixel, **kwargs)
 
 	def stop(self):
 		self.running = False
