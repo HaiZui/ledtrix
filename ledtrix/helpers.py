@@ -1,5 +1,7 @@
 import collections
 import colorsys
+import numpy as np
+from scipy.ndimage import rotate
 
 def Color(r, g, b):
 	return r * 65536 + g * 256 + b
@@ -45,3 +47,35 @@ def blend_colors(color1, color2, progress):
 	inverted_progress = 1.0 - progress
 	return Color(int(inverted_progress * r1 + progress * r2), int(inverted_progress * g1 + progress * g2), int(inverted_progress * b1 + progress * b2))
 	
+
+def color_rainbow_advance(color, step_size):
+	# Unpack R, G and B channel values
+	r, g, b = color
+	assert(0<=r<=255 and 0<=g<=255 and 0<=b<=255), "Invalid color"
+	# Process
+	if r > 0 and b == 0:
+		r = max(r-step_size, 0)
+		g = min(g+step_size, 255)
+	elif g > 0 and r == 0:
+		g = max(g-step_size, 0)
+		b = min(b+step_size, 255)
+	elif b > 0 and g == 0:
+		r = min(r+step_size, 255)
+		b = max(b-step_size, 0)
+	elif r == g == b == 0:
+		pass
+	else:
+		b = min(b+step_size, 255)
+	return (r, g, b)
+
+
+
+def rotate_array(image, xy, angle):
+    im_rot = rotate(image,angle) 
+    org_center = (np.array(image.shape[:2][::-1])-1)/2.
+    rot_center = (np.array(im_rot.shape[:2][::-1])-1)/2.
+    org = xy-org_center
+    a = np.deg2rad(angle)
+    new = np.array([org[0]*np.cos(a) + org[1]*np.sin(a),
+            -org[0]*np.sin(a) + org[1]*np.cos(a) ])
+    return im_rot, new+rot_center
