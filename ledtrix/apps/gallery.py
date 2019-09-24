@@ -7,6 +7,8 @@ import pygame
 import configparser
 import time
 from PIL import Image
+from ledtrix.effects.coloreffects import EffectColorTransformation
+from ledtrix.effects.movingeffects import EffectRotate
 
 class Gallery(Module):
 	def __init__(self, screen, filepath):
@@ -25,16 +27,20 @@ class Gallery(Module):
 		self.load_image()
 		self.screen.pixel = self.frames[0]
 		self.screen.update()
+		self.interval = self.load_interval() 
+		self.tick_interval = self.load_tick_interval()
+		self.effects = [(EffectRotate(angle=10),{})]
+
+		self.start_time = time.time()
 		
 		self.start()
-		self.interval = self.load_interval() 
 
 	def next_image(self):
 		print("Gallery.next_image")
 		self.pos = (self.pos + 1) % len(self.filenames)
 		self.load_image()
 		self.screen.pixel = self.frames[0]
-		self.screen.update()
+		self.screen.update() 
 
 	def load_filenames(self, location):
 		print("Gallery.load_filenames")
@@ -62,11 +68,20 @@ class Gallery(Module):
 		cfg = configparser.ConfigParser()
 		cfg.read(self.filepath + 'config.ini')
 		return cfg.getint('gallery', 'hold')
+		
+	def load_tick_interval(self):
+		cfg = configparser.ConfigParser()
+		cfg.read(self.filepath + 'config.ini')
+		return cfg.getfloat('gallery', 'tick_interval')
 
 	def tick(self):
-		print("Gallery.tick, pos={}".format(self.pos))
-		self.next_image()
-		time.sleep(self.interval)
+		self.process_effects()
+		self.screen.update() 
+		time.sleep(self.tick_interval)
+		if time.time() > self.start_time + self.interval:
+			self.next_image()
+			self.start_time = time.time()
+		#time.sleep(self.interval)
 		
 	def on_start(self):
 		print('Starting ' + self.filepath)
