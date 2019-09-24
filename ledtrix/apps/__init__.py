@@ -1,9 +1,10 @@
 from _thread import start_new_thread
-from ledtrix.helpers import *
+import time
 
 class Module(object):
-	def __init__(self, screen):
+	def __init__(self, screen, effects=[]):
 		self.screen = screen
+		self.effects = effects
 		self.running = False
 
 	def tick(self):
@@ -22,9 +23,14 @@ class Module(object):
 
 		self.on_start()
  		
+	def process_effects(self):
+		for effect, kwargs in self.effects:
+			self.screen.pixel = effect.process(self.screen.pixel, **kwargs)
+
 	def stop(self):
 		self.running = False
 		self.on_stop()
+		time.sleep(1)
 
 	def on_start(self):
 		pass
