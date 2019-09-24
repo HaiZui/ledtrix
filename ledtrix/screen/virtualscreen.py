@@ -3,7 +3,6 @@ import collections
 from ledtrix.screen.abstractscreen import AbstractScreen
 from PIL import Image
 
-# Behaves like the actual LED screen, but shows the screen content on a computer screen
 class VirtualScreen(AbstractScreen):
 	def __init__(self, width = 30, height = 20):		
 		super(VirtualScreen, self).__init__(width, height)
@@ -19,7 +18,7 @@ class VirtualScreen(AbstractScreen):
 				if x <= self.width and y <= self.height:
 					x_coor = x
 					y_coor = self.height - y
-					pygame.draw.rect(self.surface, tuple(self.pixel[x][y]), (x_coor * self.pixel_size, (y_coor - 1)*self.pixel_size, self.pixel_size, self.pixel_size))
+					pygame.draw.rect(self.surface, tuple(self.pixel[x][y]), (x_coor * self.pixel_size, (y_coor - 1) * self.pixel_size, self.pixel_size, self.pixel_size))
 
 		self.screen.blit(self.surface, (0, 0))
 		pygame.display.flip()
