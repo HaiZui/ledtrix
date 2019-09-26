@@ -7,12 +7,10 @@ import pygame
 import configparser
 import time
 from PIL import Image
-from ledtrix.effects.coloreffects import EffectColorTransformation
-from ledtrix.effects.movingeffects import EffectRotate
 
 class Gallery(Module):
-	def __init__(self, screen, filepath):
-		super(Gallery, self).__init__(screen)
+	def __init__(self, screen, filepath, effects=[]):
+		super(Gallery, self).__init__(screen,effects=effects)
 
 		print("Initializing Gallery")
 		if filepath[:-1] != '/':
@@ -30,7 +28,6 @@ class Gallery(Module):
 		self.screen.update()
 		self.interval = self.load_interval() 
 		self.tick_interval = self.load_tick_interval()
-		self.effects = [(EffectRotate(speed=10.),{})]
 
 		self.start_time = time.time()
 		
@@ -83,7 +80,6 @@ class Gallery(Module):
 		if time.time() > self.start_time + self.interval:
 			self.next_image()
 			self.start_time = time.time()
-		#time.sleep(self.interval)
 		
 	def on_start(self):
 		print('Starting ' + self.filepath)
