@@ -1,4 +1,5 @@
 import numpy as np
+from ledtrix.effects import Effect
 from ledtrix.helpers import color_rainbow_advance
 
 
@@ -6,7 +7,7 @@ from ledtrix.helpers import color_rainbow_advance
 def effect_rainbow_color_advance(pixel_array, step_size):
     pixel_array_return = pixel_array
     for i in range(len(pixel_array)):
-        for j in range(len(pixel_array)):
+        for j in range(len(pixel_array[i])):
             pixel_array_return[i][j] = color_rainbow_advance(pixel_array[i][j],step_size=step_size)
     return pixel_array_return
 
@@ -27,8 +28,10 @@ def rotation_matrix(theta):
         [0,np.sin(theta),np.cos(theta)]
     ]
 
-class EffectColorTransformation:
+class EffectColorTransformation(Effect):
     def __init__(self, angle):
+        # Use last frame as a reference
+        super().__init__(use_last_frame=True)
         self.angle = angle
 
     def process(self, pixel_array):
@@ -37,3 +40,13 @@ class EffectColorTransformation:
         im_rotated = np.einsum("ijk,lk->ijl", im_normed, rotation_matrix(theta))
         im2 = undo_normalise(im_rotated)
         return im2
+
+
+class EffectRainbowTransformation(Effect):
+    def __init__(self, step_size):
+        # Use last frame as a reference
+        super().__init__(use_last_frame=True)
+        self.step_size = step_size
+
+    def process(self, pixel_array):
+        return  effect_rainbow_color_advance(pixel_array, self.step_size)

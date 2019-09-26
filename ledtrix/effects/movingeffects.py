@@ -13,9 +13,16 @@ class EffectRotate(Effect):
         
 
     def process(self, pixel_array):
+        # Set new angle
         self.angle += self.speed
         return rotate(pixel_array.astype(np.uint8), angle=self.angle, mode='nearest', reshape=True,order=2)
-        # x0 = int(len(pixel_array) / 2)
-        # y0 = int(len(pixel_array[0])/2)
 
-        # return helpers.rotate_array(pixel_array, (x0,y0), self.angle)
+class EffectRoll(Effect):
+    def __init__(self, axis, shift):
+        # Use last frame as a reference
+        super().__init__(use_last_frame=True)
+        self.axis = axis
+        self.shift = shift
+
+    def process(self, pixel_array):
+        return np.roll(pixel_array, axis=self.axis, shift=self.shift)
