@@ -10,8 +10,11 @@ from ledtrix.effects.coloreffects import EffectColorTransformation, EffectRainbo
 from ledtrix.effects.movingeffects import EffectRotate, EffectRoll
 
 effects = [
-			(EffectRoll(axis=(0,1,2), shift=(2,2,0)),{})
-			,(EffectRainbowTransformation(step_size=20),{})
+			# ,(EffectRainbowTransformation(step_size=20),{})
+			(EffectRotate(speed=5),{})
+			#(EffectRoll(axis=(0,1,2), shift=(2,0,0)),{})
+			#,(EffectRainbowTransformation(step_size=20),{})
+			
 		]
 screen = create_screen()
 

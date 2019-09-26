@@ -39,7 +39,7 @@ class Gallery(Module):
 		self.load_image()
 		self.screen.pixel = self.frames[0]
 		self.screen.initial_pixel = self.frames[0]
-		self.screen.update() 
+		#self.screen.update() 
 
 	def load_filenames(self, location):
 		print("Gallery.load_filenames")
