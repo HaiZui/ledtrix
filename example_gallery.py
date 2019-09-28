@@ -11,14 +11,14 @@ from ledtrix.effects.movingeffects import EffectRotate, EffectRoll, EffectDiffus
 from ledtrix.effects.screeneffects import EffectBlinkConstantly
 
 screen_effects = [
-			(EffectBlinkConstantly(frequency=2),{})
+			(EffectBlinkConstantly(frequency=1),{})
 			]
 screen = create_screen(brightness=1, effects=screen_effects)
 effects = [
 			# (EffectRainbowTransformation(step_size=20),{})
 			# (EffectRotate(speed=5),{})
-			(EffectDiffusion(speed=1),{})
-			,(EffectRoll(axis=(0,1,2), shift=(0,1,0)),{})
+			#(EffectDiffusion(speed=1),{})
+			(EffectRoll(axis=(0,1,2), shift=(0,1,0)),{})
 			#,(EffectRainbowTransformation(step_size=20),{})
 			#,(EffectRainbowTransformation(step_size=20),{})
 		]
