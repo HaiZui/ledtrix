@@ -19,6 +19,7 @@ effects = [
 			# (EffectRotate(speed=5),{})
 			(EffectDiffusion(speed=1),{})
 			,(EffectRoll(axis=(0,1,2), shift=(0,1,0)),{})
+			,(EffectRainbowTransformation(step_size=20),{})
 			#,(EffectRainbowTransformation(step_size=20),{})
 		]
 

@@ -61,7 +61,7 @@ def color_rainbow_advance(color, step_size):
 	elif r == g == b == 0:
 		pass
 	else:
-		b = min(b+step_size, 255)
+		b = max(b-step_size, 0)
 	return (r, g, b)
 
 

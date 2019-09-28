@@ -8,7 +8,8 @@ def effect_rainbow_color_advance(pixel_array, step_size):
     pixel_array_return = pixel_array
     for i in range(len(pixel_array)):
         for j in range(len(pixel_array[i])):
-            pixel_array_return[i][j] = color_rainbow_advance(pixel_array[i][j],step_size=step_size)
+            if np.any(pixel_array[i][j] != [0,0,0]):
+                pixel_array_return[i][j] = color_rainbow_advance(pixel_array[i][j],step_size=step_size)
     return pixel_array_return
 
 
