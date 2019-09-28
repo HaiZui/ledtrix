@@ -1,6 +1,7 @@
 import pygame
 import config
 from ledtrix.screen.abstractscreen import AbstractScreen
+from ledtrix.helpers import darken_color
 
 instance = None
 
@@ -20,9 +21,10 @@ class Screen(AbstractScreen):
 		for y in range(self.height):
 			for x in range(self.width):
 				if y <= len(self.pixel)-1 and x <= len(self.pixel[0]) -1:
+					color = darken_color(self.pixel[self.height-y-1][x], self.brightness)
 					if y % 2 == 0:
-						self.strip[y * self.width + x] = self.pixel[self.height-y-1][x]
-					else: self.strip[y * self.width + self.width - 1 - x] = self.pixel[self.height-y-1][x]
+						self.strip[y * self.width + x] = color
+					else: self.strip[y * self.width + self.width - 1 - x] = color
 		self.strip.show()
 
 	def update_brightness(self):

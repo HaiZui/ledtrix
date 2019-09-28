@@ -2,11 +2,13 @@ import ledtrix.helpers as helpers
 import time
 
 class AbstractScreen(object):
-	def __init__(self, width = 30, height = 20):
+	def __init__(self, width = 30, height = 20, brightness=1, effects=[]):
 		self.width = width
 		self.height = height
+		self.brightness = brightness
 		self.pixel = [[(0,0,0) for y in range(height)] for x in range(width)]
 		self.initial_pixel = [[(0,0,0) for y in range(height)] for x in range(width)]
+		self.effects = effects
 
 	def clear(self, color = (0,0,0)):
 		for x in range(len(self.pixel)):
@@ -14,6 +16,8 @@ class AbstractScreen(object):
 				self.pixel[x][y] = color
 
 	def update(self):
+		print('screen update')
+		self.process_effects()
 		pass
 
 	def fade(self, duration, fadein):
@@ -34,3 +38,7 @@ class AbstractScreen(object):
 
 	def fade_out(self, duration):
 		self.fade(duration, False)
+		
+	def process_effects(self):
+		for effect, kwargs in self.effects:
+			self.screen = effect.process(self.screen, **kwargs)

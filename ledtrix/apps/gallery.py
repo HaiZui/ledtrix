@@ -39,7 +39,7 @@ class Gallery(Module):
 		self.load_image()
 		self.screen.pixel = self.frames[0]
 		self.screen.initial_pixel = self.frames[0]
-		#self.screen.update() 
+		self.screen.update() 
 
 	def load_filenames(self, location):
 		print("Gallery.load_filenames")
@@ -66,7 +66,7 @@ class Gallery(Module):
 	def load_interval(self):
 		cfg = configparser.ConfigParser()
 		cfg.read(self.filepath + 'config.ini')
-		return cfg.getint('gallery', 'hold')
+		return cfg.getfloat('gallery', 'hold')
 		
 	def load_tick_interval(self):
 		cfg = configparser.ConfigParser()
