@@ -50,3 +50,17 @@ class EffectRoll(Effect):
 
     def process(self, pixel_array):
         return np.roll(pixel_array, axis=self.axis, shift=self.shift)
+
+
+class EffectDiffusion(Effect):
+    def __init__(self, speed):
+        # Use last frame as a reference
+        super().__init__(use_last_frame=True)
+        self.speed = speed
+
+    def process(self, pixel_array):
+        axis = (0,1,2)
+        shift_x = int(np.random.normal(scale=self.speed,size=1))
+        shift_y = int(np.random.normal(scale=self.speed,size=1))
+        shift = (shift_x,shift_y,0)
+        return np.roll(pixel_array, axis=axis, shift=shift)
