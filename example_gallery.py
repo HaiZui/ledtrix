@@ -19,17 +19,22 @@ effects = [
 			# (EffectRotate(speed=5),{})
 			(EffectDiffusion(speed=1),{})
 			,(EffectRoll(axis=(0,1,2), shift=(0,1,0)),{})
-			,(EffectRainbowTransformation(step_size=20),{})
+			#,(EffectRainbowTransformation(step_size=20),{})
 			#,(EffectRainbowTransformation(step_size=20),{})
 		]
 
-gallery = Gallery(screen, "examples/gallery/1", effects=effects)
+gallery = Gallery(screen, "examples/gallery/2", effects=effects)
 
 while True:
-	if config.virtual_hardware:
-		pygame.time.wait(1)
-		for event in pygame.event.get():
-			if event.type == pygame.QUIT:
-				pygame.display.quit(), sys.exit()
-	else:
-		time.sleep(0.01)
+	try:
+		if config.virtual_hardware:
+			pygame.time.wait(1)
+			for event in pygame.event.get():
+				if event.type == pygame.QUIT:
+					pygame.display.quit(), sys.exit()
+		else:
+			pass
+	except KeyboardInterrupt:
+		screen.clear()
+		screen.update()
+		break

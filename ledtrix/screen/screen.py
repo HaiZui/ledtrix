@@ -20,8 +20,8 @@ class Screen(AbstractScreen):
 		print("Image size: ", len(self.pixel), len(self.pixel[0]))
 		for y in range(self.height):
 			for x in range(self.width):
-				if y <= len(self.pixel)-1 and x <= len(self.pixel[0]) -1:
-					color = darken_color(self.pixel[self.height-y-1][x], self.brightness)
+				if x <= len(self.pixel)-1 and y <= len(self.pixel[0]) -1:
+					color = darken_color(self.pixel[x][y], self.brightness)
 					if y % 2 == 0:
 						self.strip[y * self.width + x] = color
 					else: self.strip[y * self.width + self.width - 1 - x] = color
