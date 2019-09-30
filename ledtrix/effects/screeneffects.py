@@ -1,6 +1,27 @@
 import time
 import numpy as np
 
+class EffectExponentialFade():
+    def __init__(self, lifetime):
+        """
+        half_life: float
+            Half life of decay in milliseconds
+        """
+        self.lifetime = lifetime
+        self.last_update = time.time()
+        # Initialize brightness coefficient
+        self.brightness_init = 1
+
+    def process(self, screen):
+        time_now = time.time()
+        # Elapsed time in milliseconds
+        elapsed_time = (time_now - self.last_update) * 1000
+        screen.brightness = np.exp(-elapsed_time/self.lifetime)
+
+    def trigger(self, screen):
+        # Trigger and initialize
+        self.last_update = time.time()
+
 class EffectBlinkConstantly():
     def __init__(self, frequency):
         self.frequency=frequency
@@ -31,5 +52,6 @@ class EffectBlinkConstantly():
             elif self.direction > 0:
                 self.direction = -1 
         screen.brightness = new_brightness
-        
-        return screen
+    
+    def trigger(self, screen):
+        pass
