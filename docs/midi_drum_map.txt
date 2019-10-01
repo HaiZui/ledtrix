@@ -1,0 +1,15 @@
+
+38	Snare
+37	Snare edge
+43	Tom1
+58	Tom1 Edge
+45	Tom2
+47	Tom2 Edge
+48	Tom3
+50	Tom3 Edge
+4	Hihat open
+46	Hihat closed
+51	Ride cymbal
+49/55	Crash
+36	Kickpad
+

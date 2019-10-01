@@ -35,6 +35,9 @@ class Gallery(Module):
 
 	def next_image(self):
 		print("Gallery.next_image")
+		self.initialize_effects()
+		self.screen.initialize_effects()
+
 		self.pos = (self.pos + 1) % len(self.filenames)
 		self.load_image()
 		self.screen.pixel = self.frames[0]

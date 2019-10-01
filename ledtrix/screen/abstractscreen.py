@@ -39,12 +39,14 @@ class AbstractScreen(object):
 	def fade_out(self, duration):
 		self.fade(duration, False)
 		
-	def process_effects(self, screen):
-		print('Brighness:',self.brightness)
+	def initialize_effects(self):
+		for effect, _ in self.effects:
+			effect.initialize()
+
+	def process_effects(self):
 		for effect, kwargs in self.effects:
-			effect.process(screen, **kwargs)
+			effect.process(self, **kwargs)
 
 	def process_triggers(self):
 		for effect, kwargs in self.effects:
-			print('processing ', effect)
 			effect.trigger(self, **kwargs)

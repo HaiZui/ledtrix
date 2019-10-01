@@ -11,7 +11,10 @@ class EffectRotate(Effect):
         self.speed = speed
         # Initialize angle
         self.angle = 0
-        
+
+    def initialize(self):
+        # Initialize angle
+        self.angle = 0
 
     def process(self, pixel_array):
         # Set new angle
@@ -48,6 +51,9 @@ class EffectRoll(Effect):
         self.axis = axis
         self.shift = shift
 
+    def initialize(self):
+        pass
+
     def process(self, pixel_array):
         return np.roll(pixel_array, axis=self.axis, shift=self.shift)
 
@@ -57,6 +63,9 @@ class EffectDiffusion(Effect):
         # Use last frame as a reference
         super().__init__(use_last_frame=True)
         self.speed = speed
+
+    def initialize(self):
+        pass
 
     def process(self, pixel_array):
         axis = (0,1,2)

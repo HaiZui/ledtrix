@@ -1,6 +1,6 @@
 import numpy as np
 from ledtrix.effects import Effect
-from ledtrix.helpers import color_rainbow_advance
+from ledtrix.helpers import color_rainbow_advance, complement
 
 
 
@@ -10,6 +10,14 @@ def effect_rainbow_color_advance(pixel_array, step_size):
         for j in range(len(pixel_array[i])):
             if np.any(pixel_array[i][j] != [0,0,0]):
                 pixel_array_return[i][j] = color_rainbow_advance(pixel_array[i][j],step_size=step_size)
+    return pixel_array_return
+
+def effect_complemetary_colors(pixel_array):
+    pixel_array_return = pixel_array
+    for i in range(len(pixel_array)):
+        for j in range(len(pixel_array[i])):
+            if np.any(pixel_array[i][j] != [0,0,0]):
+                pixel_array_return[i][j] = complement(pixel_array[i][j])
     return pixel_array_return
 
 
@@ -35,6 +43,9 @@ class EffectColorTransformation(Effect):
         super().__init__(use_last_frame=True)
         self.angle = angle
 
+    def initialize(self):
+        pass
+    
     def process(self, pixel_array):
         theta = self.angle / 180 * np.pi
         im_normed = do_normalise(pixel_array)
@@ -49,5 +60,10 @@ class EffectRainbowTransformation(Effect):
         super().__init__(use_last_frame=True)
         self.step_size = step_size
 
+    def initialize(self):
+        pass
+
     def process(self, pixel_array):
         return  effect_rainbow_color_advance(pixel_array, self.step_size)
+
+

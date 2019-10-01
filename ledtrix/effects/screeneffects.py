@@ -1,22 +1,25 @@
 import time
 import numpy as np
+from ledtrix.effects.coloreffects import effect_complemetary_colors
 
 class EffectExponentialFade():
-    def __init__(self, lifetime):
+    def __init__(self, lifetime, minimum_brightness = 0):
         """
         half_life: float
             Half life of decay in milliseconds
         """
         self.lifetime = lifetime
         self.last_update = time.time()
-        # Initialize brightness coefficient
-        self.brightness_init = 1
+        self.minimum_brightness = minimum_brightness
+
+    def initialize(self):
+        self.last_update = time.time()
 
     def process(self, screen):
         time_now = time.time()
         # Elapsed time in milliseconds
         elapsed_time = (time_now - self.last_update) * 1000
-        screen.brightness = np.exp(-elapsed_time/self.lifetime)
+        screen.brightness = max(np.exp(-elapsed_time/self.lifetime), self.minimum_brightness)
 
     def trigger(self, screen):
         # Trigger and initialize
@@ -29,6 +32,10 @@ class EffectBlinkConstantly():
         self.direction = 1
         self.last_update = time.time()
     
+    def initialize(self):
+        self.direction = 1
+        self.last_update = time.time()
+
     def process(self, screen):
         time_now = time.time()
         elapsed_time = time_now - self.last_update
@@ -55,3 +62,23 @@ class EffectBlinkConstantly():
     
     def trigger(self, screen):
         pass
+
+    
+class EffectComplementaryColor():
+    def __init__(self, constant_color=True):
+        self.constant_color = constant_color
+        # Initialize
+        self.is_complement = 0
+
+    def initialize(self):
+        self.is_complement = 0
+
+    def process(self, screen):
+        if self.is_complement == 0:
+            screen.pixel = effect_complemetary_colors(screen.pixel)
+            if self.constant_color is True:
+                self.is_complement = 1
+
+    def trigger(self, screen):
+        self.is_complement = 0
+        

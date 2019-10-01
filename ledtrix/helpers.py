@@ -75,3 +75,23 @@ def rotate_array(image, xy, angle):
     new = np.array([org[0]*np.cos(a) + org[1]*np.sin(a),
             -org[0]*np.sin(a) + org[1]*np.cos(a) ])
     return im_rot, new+rot_center
+
+# Sum of the min & max of (a, b, c)
+def hilo(color):
+	a = color[0]
+	b = color[1]
+	c = color[2]
+	if c < b: 
+		b, c = c, b
+	if b < a: 
+		a, b = b, a
+	if c < b: 
+		b, c = c, b	
+	return a + c
+
+def complement(color):
+	r = color[0]
+	g = color[1]
+	b = color[2]
+	k = hilo(color)
+	return tuple(k - u for u in (r, g, b))

@@ -30,6 +30,10 @@ class Module(object):
 			elif effect.use_last_frame == False:
 				self.screen.pixel = effect.process(self.screen.initial_pixel, **kwargs)
 
+	def initialize_effects(self):
+		for effect, _ in self.effects:
+			effect.initialize()
+
 	def stop(self):
 		self.running = False
 		self.on_stop()
