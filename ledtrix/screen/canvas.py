@@ -13,4 +13,3 @@ class Canvas(object):
 
 	def set_pixels(self, array, pos=(0,0)):
 		self.pixel = add_image_arrays(array_1=self.pixel, array_2=array, pos=pos)
-		print(self.pixel.shape)
