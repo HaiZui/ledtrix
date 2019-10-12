@@ -4,6 +4,8 @@ from scipy.ndimage.interpolation import rotate
 import ledtrix.helpers as helpers
 from ledtrix.effects import Effect
 
+from PIL import Image
+
 class EffectRotate(Effect):
     def __init__(self, speed):
         # Use initial frame as a reference for rotating
@@ -20,7 +22,14 @@ class EffectRotate(Effect):
         # Set new angle
         self.angle += self.speed
         #return rotate(pixel_array.astype(np.uint8), angle=self.angle, mode='constant', reshape=True,order=4,prefilter=True,cval=100)
-        return rotate_image(pixel_array, self.angle, np.array([15,5])) 
+        # center pivot
+        x, y, _ = pixel_array.shape
+        pivot_x = int(x/2)
+        pivot_y = int(y/2)
+        rotated = rotate_image(pixel_array, self.angle, np.array([pivot_x,pivot_y]))
+        # Debug
+        # Image.fromarray(rotated.astype(np.uint8)).save('{}.png'.format(self.angle))
+        return rotated
        
 
 def rotate_image(img, angle, pivot):
@@ -41,8 +50,8 @@ def rotate_image(img, angle, pivot):
     cropx = int((imgP.shape[1] - total_x)/2)
     imgP[cropy:-cropy, cropx:-cropx] = ndimage.rotate(imgP[cropy:-cropy, cropx:-cropx], angle,
                                                       reshape=False, prefilter=False, mode='constant',order=4)
-
-    return imgP[pads[0][0]: -pads[0][1], pads[1][0]: -pads[1][1]] 
+    rotated = imgP[pads[0][0]: -pads[0][1], pads[1][0]: -pads[1][1]] 
+    return rotated
 
 class EffectRoll(Effect):
     def __init__(self, axis, shift):

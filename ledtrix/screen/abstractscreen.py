@@ -1,14 +1,36 @@
 import ledtrix.helpers as helpers
 import time
+import copy
+import numpy as np
 
-class AbstractScreen(object):
-	def __init__(self, width = 30, height = 20, brightness=1, effects=[]):
+class ScreenShapeRectangle:
+	def __init__(self, width, height,x0=0, y0=0):
 		self.width = width
 		self.height = height
+		self.x0 = x0
+		self.y0 = y0
+
+
+class ScreenShapeCircle:
+	def __init__(self, center, radius):
+		self.center = center
+		self.radius = radius
+
+class AbstractScreen(object):
+	def __init__(self, shape, canvas, scale=1, brightness=1, effects=[]):
+		self.shape = shape
+		self.canvas = canvas
+		self.scale = scale
 		self.brightness = brightness
-		self.pixel = [[(0,0,0) for y in range(height)] for x in range(width)]
-		self.initial_pixel = [[(0,0,0) for y in range(height)] for x in range(width)]
 		self.effects = effects
+		self._crop_canvas()
+
+	def _crop_canvas(self):
+		width = self.shape.width
+		height = self.shape.height
+		x0 = self.shape.x0
+		y0 = self.shape.y0
+		self.pixel = np.roll(self.canvas.pixel, axis=(0,1,2), shift=(-x0,-y0,0))[:width,:height]
 
 	def clear(self, color = (0,0,0)):
 		for x in range(len(self.pixel)):
@@ -17,28 +39,10 @@ class AbstractScreen(object):
 
 	def update(self):
 		print('screen update')
+		self._crop_canvas()
 		self.process_effects()
 		pass
 
-	def fade(self, duration, fadein):
-		frame = [[self.pixel[x][y] for y in range(self.height)] for x in range(self.width)]
-
-		start = time.time()
-		end = start + duration
-
-		while time.time() < end:
-			progress = (time.time() - start) / duration
-			if not fadein:
-				progress = 1.0 - progress
-			self.pixel = [[helpers.darken_color(frame[x][y], progress) for y in range(self.height)] for x in range(self.width)]
-			self.update()
-
-	def fade_in(self, duration):
-		self.fade(duration, True)
-
-	def fade_out(self, duration):
-		self.fade(duration, False)
-		
 	def initialize_effects(self):
 		for effect, _ in self.effects:
 			effect.initialize()

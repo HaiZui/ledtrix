@@ -95,3 +95,35 @@ def complement(color):
 	b = color[2]
 	k = hilo(color)
 	return tuple(k - u for u in (r, g, b))
+
+
+def add_image_arrays(array_1, array_2, pos=(0,0)):
+	"""
+	Add two matrices of different sizes in place, offset by xy coordinates
+	Usage:
+		- array_1: base matrix
+		- array_2: add this matrix to array_1
+		- pos: tuple (x,y) containing coordinates
+	
+	Arguments
+	---------
+	array_1 : numpy.array
+		Base array
+	array_2 : numpy.array
+		Second array
+	pos : tuple(int, int)
+		xy coordination of the offset
+	"""
+	array_ret = array_1.copy()
+
+	x, y = pos
+	size_y_2, size_x_2, _ = array_2.shape
+	size_y_1, size_x_1, _ = array_1.shape
+
+	if x > size_x_1 or y > size_y_1:
+		return array_1
+
+	xmax, ymax = min(x + size_x_2, size_x_1), min(y + size_y_2, size_y_1)
+	
+	array_ret[y:ymax, x:xmax] += array_2[:size_y_1-y, :size_x_1-x]
+	return array_ret

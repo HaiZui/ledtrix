@@ -23,8 +23,7 @@ class Gallery(Module):
 		
 		self.pos = 0
 		self.load_image()
-		self.screen.pixel = self.frames[0]
-		self.screen.initial_pixel = self.frames[0]
+		self.screen.canvas.set_pixels(self.frames[0])
 		self.screen.update()
 		self.interval = self.load_interval() 
 		self.tick_interval = self.load_tick_interval()
@@ -40,8 +39,8 @@ class Gallery(Module):
 
 		self.pos = (self.pos + 1) % len(self.filenames)
 		self.load_image()
-		self.screen.pixel = self.frames[0]
-		self.screen.initial_pixel = self.frames[0]
+		self.screen.canvas.clear()
+		self.screen.canvas.set_pixels(self.frames[0])
 		self.screen.update() 
 
 	def load_filenames(self, location):

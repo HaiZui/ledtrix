@@ -1,5 +1,6 @@
-from ledtrix.screenfactory import create_screen
+from ledtrix.screenfactory import create_screen, create_canvas
 from ledtrix.apps.gallery import Gallery
+from ledtrix.screen.abstractscreen import ScreenShapeRectangle
 import config
 import pygame
 import time
@@ -10,16 +11,22 @@ from ledtrix.effects.coloreffects import EffectColorTransformation, EffectRainbo
 from ledtrix.effects.movingeffects import EffectRotate, EffectRoll, EffectDiffusion
 from ledtrix.effects.screeneffects import EffectBlinkConstantly, EffectComplementaryColor
 
+
+canvas = create_canvas(40, 40)
 screen_effects = [
-			#(EffectBlinkConstantly(frequency=1, minimum_brightness=0.1),{})
-			(EffectComplementaryColor(constant_color=True),{})
+			#(EffectBlinkConstantly(frequency=1),{})
+			#(EffectComplementaryColor(constant_color=True),{})
 			]
-screen = create_screen(brightness=1, effects=screen_effects)
+
+screen = create_screen(canvas=canvas, brightness=1, effects=screen_effects)
+screen.shape.x0 = 0
+screen.shape.y0 = 0
+
 effects = [
-			 (EffectRainbowTransformation(step_size=20),{})
-			# (EffectRotate(speed=5),{})
-			,(EffectDiffusion(speed=1),{})
-			,(EffectRoll(axis=(0,1,2), shift=(0,1,0)),{})
+			#(EffectRainbowTransformation(step_size=20),{})
+			#(EffectRotate(speed=10),{})
+			#EffectDiffusion(speed=1),{})
+			(EffectRoll(axis=(0,1,2), shift=(1,1,0)),{})
 			#,(EffectRainbowTransformation(step_size=20),{})
 			#,(EffectRainbowTransformation(step_size=20),{})
 		]

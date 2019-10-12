@@ -1,13 +1,15 @@
 import pygame
 import collections
-from ledtrix.screen.abstractscreen import AbstractScreen
+from ledtrix.screen.abstractscreen import AbstractScreen, ScreenShapeRectangle
 from ledtrix.helpers import darken_color
 from PIL import Image
 
 class VirtualScreen(AbstractScreen):
-	def __init__(self, width = 30, height = 20, brightness=1, effects=[]):		
+	def __init__(self, canvas=None, width = 30, height = 20, brightness=1, effects=[]):		
 		print(effects)
-		super(VirtualScreen, self).__init__(width, height, brightness=brightness, effects=effects)
+		super(VirtualScreen, self).__init__(canvas=canvas, shape=ScreenShapeRectangle(width, height), brightness=brightness, effects=effects)
+		self.width = width
+		self.height = height
 		self.pixel_size = 30
 		print(self.effects)
 		pygame.display.init()
@@ -15,6 +17,7 @@ class VirtualScreen(AbstractScreen):
 		self.surface = pygame.Surface(self.screen.get_size())	
 				
 	def update(self):
+		self._crop_canvas()
 		self.process_effects()
 		for x in range(len(self.pixel)):
 			for y in range(len(self.pixel[x])):
