@@ -12,7 +12,7 @@ from ledtrix.effects.movingeffects import EffectRoll, EffectDiffusion
 from ledtrix.effects.screeneffects import EffectBlinkConstantly, EffectComplementaryColor, EffectRotate
 
 
-canvas = create_canvas(40, 40)
+canvas = create_canvas(30, 40)
 screen_effects = [
 			#(EffectBlinkConstantly(frequency=1),{})
 			#(EffectComplementaryColor(constant_color=True),{})
@@ -20,14 +20,14 @@ screen_effects = [
 			]
 
 screen = create_screen(canvas=canvas, brightness=1, effects=screen_effects)
-screen.shape.x0 = 0
-screen.shape.y0 = 0
+screen.shape.x0 = 20
+screen.shape.y0 = 20
 
 effects = [
 			#(EffectRainbowTransformation(step_size=20),{})
 			#(EffectRotate(speed=10),{})
-			(EffectDiffusion(speed=1),{})
-			,(EffectRoll(axis=(0,1,2), shift=(3,3,0)),{})
+			#(EffectDiffusion(speed=1),{})
+			(EffectRoll(axis=(0,1,2), shift=(0,5,0)),{})
 			#,(EffectRainbowTransformation(step_size=20),{})
 			#,(EffectRainbowTransformation(step_size=20),{})
 		]

@@ -21,7 +21,7 @@ class AbstractScreen(object):
 		self.shape = shape
 		self.canvas = canvas
 		self.scale = scale
-		self.brightness = brightness
+		self.brightness = min(brightness, 1)
 		self.effects = effects
 		self._crop_canvas()
 

@@ -136,7 +136,7 @@ def rotate_image(img, angle, pivot):
     pads = [[img.shape[0] - pivot[0], pivot[0]], [img.shape[1] - pivot[1], pivot[1]]]
     if len(img.shape) > 2:
         pads.append([0, 0])
-    imgP = np.pad(img, pads, 'constant')
+    imgP = np.pad(img, pads, 'wrap')
     # reduce size of matrix to rotate around the object
     if len(img.shape) > 2:
         total_y = np.sum(imgP.any(axis=(0, 2))) * 30.
@@ -147,6 +147,6 @@ def rotate_image(img, angle, pivot):
     cropy = int((imgP.shape[0] - total_y)/2)
     cropx = int((imgP.shape[1] - total_x)/2)
     imgP[cropy:-cropy, cropx:-cropx] = ndimage.rotate(imgP[cropy:-cropy, cropx:-cropx], angle,
-                                                      reshape=False, prefilter=False, mode='constant',order=4)
+                                                      reshape=False, prefilter=False, mode='nearest',order=4)
     rotated = imgP[pads[0][0]: -pads[0][1], pads[1][0]: -pads[1][1]] 
     return rotated

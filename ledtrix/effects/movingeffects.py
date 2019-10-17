@@ -9,7 +9,7 @@ from PIL import Image
 class EffectRotate(Effect):
     def __init__(self, speed):
         # Use initial frame as a reference for rotating
-        super().__init__(use_last_frame=False)
+        super().__init__()
         self.speed = speed
         # Initialize angle
         self.angle = 0
@@ -21,7 +21,6 @@ class EffectRotate(Effect):
     def process(self, pixel_array):
         # Set new angle
         self.angle += self.speed
-        #return rotate(pixel_array.astype(np.uint8), angle=self.angle, mode='constant', reshape=True,order=4,prefilter=True,cval=100)
         # center pivot
         x, y, _ = pixel_array.shape
         pivot_x = int(x/2)
@@ -36,7 +35,7 @@ class EffectRotate(Effect):
 class EffectRoll(Effect):
     def __init__(self, axis, shift):
         # Use last frame as a reference
-        super().__init__(use_last_frame=True)
+        super().__init__()
         self.axis = axis
         self.shift = shift
 
@@ -50,7 +49,7 @@ class EffectRoll(Effect):
 class EffectDiffusion(Effect):
     def __init__(self, speed):
         # Use last frame as a reference
-        super().__init__(use_last_frame=True)
+        super().__init__()
         self.speed = speed
 
     def initialize(self):
