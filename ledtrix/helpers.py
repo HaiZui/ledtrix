@@ -150,3 +150,34 @@ def rotate_image(img, angle, pivot):
                                                       reshape=False, prefilter=False, mode='nearest',order=4)
     rotated = imgP[pads[0][0]: -pads[0][1], pads[1][0]: -pads[1][1]] 
     return rotated
+
+
+def reshape_image_array(array, size, origin=(0,0), center=False, mode='constant'):
+	"""
+	Reshapes image array keeping the scale and size of 
+	the original image constant.
+
+	Refills pixels if needed. 
+	"""
+	origin_x = origin[0]
+	origin_y = origin[1]
+
+	orig_size_x = len(array)
+	orig_size_y = len(array[0])
+	new_size_x = size[0]
+	new_size_y = size[1]
+
+	# Differences in lengths. 
+	# These determine whether the image should be padded or cropped
+	diff_x = new_size_x - orig_size_x - origin[0]
+	diff_y = new_size_y - orig_size_y - origin[1]
+	if origin == (0,0) and diff_x == 0 and diff_y == 0:
+		# No need to do anything
+		return array
+	elif origin == (0,0) and diff_x <= 0 and diff_y <= 0:
+		# Only crop
+		return array[:orig_size_x+diff_x, :orig_size_y+diff_y]
+	else:
+		# Need to pad also
+		cropped = array[max(-origin_x,0):new_size_x-origin_x,max(-origin_y,0):new_size_y-origin_y]
+		return np.pad(cropped,((max(origin[0],0), max(diff_x,0)),(max(origin[1],0), max(diff_y,0)),(0,0)),mode=mode)[:new_size_x, :new_size_y]
