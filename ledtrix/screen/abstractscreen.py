@@ -2,6 +2,7 @@ import ledtrix.helpers as helpers
 import time
 import copy
 import numpy as np
+from PIL import Image
 
 class ScreenShapeRectangle:
 	def __init__(self, width, height,x0=0, y0=0):
@@ -30,7 +31,8 @@ class AbstractScreen(object):
 		height = self.shape.height
 		x0 = self.shape.x0
 		y0 = self.shape.y0
-		self.pixel = np.roll(self.canvas.pixel, axis=(0,1,2), shift=(-x0,-y0,0))[:width,:height]
+		#self.pixel = np.roll(self.canvas.pixel, axis=(0,1,2), shift=(-x0,-y0,0))[:width,:height]
+		self.pixel = helpers.reshape_image_array(self.canvas.pixel, (width, height), origin=(x0,y0)) * self.brightness
 
 	def clear(self, color = (0,0,0)):
 		for x in range(len(self.pixel)):
@@ -38,10 +40,8 @@ class AbstractScreen(object):
 				self.pixel[x][y] = color
 
 	def update(self):
-		print('screen update')
 		self._crop_canvas()
 		self.process_effects()
-		pass
 
 	def initialize_effects(self):
 		for effect, _ in self.effects:
