@@ -2,11 +2,7 @@ import time
 import numpy as np
 from PIL import Image
 from ledtrix.effects import Effect
-<<<<<<< HEAD
-from ledtrix.helpers import rotate_image, effect_complemetary_colors
-=======
-from ledtrix.effects.coloreffects import effect_complemetary_colors
-from ledtrix.helpers import rotate_image, reshape_image_array
+from ledtrix.helpers import rotate_image, reshape_image_array, effect_complemetary_colors
 
 class EffectOverlay(Effect):
     def __init__(self, screen_other, alpha=0, triggers=None):
@@ -23,7 +19,6 @@ class EffectOverlay(Effect):
         cropped_other = reshape_image_array(self.screen_other.pixel, size=(screen.width, screen.height), origin=(0,0))
         screen.pixel = (1-alpha) * screen.pixel + alpha * cropped_other
 
->>>>>>> 5ac17eda27fdbbc2d4346e20f467d3f0cdc43b13
 
 class EffectChangeBrighness(Effect):
     def __init__(self, brightness, triggers=None):
