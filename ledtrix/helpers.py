@@ -133,6 +133,7 @@ def rotate_image(img, angle, pivot):
     return rotated
 
 
+<<<<<<< HEAD
 def effect_rainbow_color_advance(pixel_array, step_size):
     pixel_array_return = pixel_array
     for i in range(len(pixel_array)):
@@ -165,3 +166,34 @@ def rotation_matrix(theta):
         [0,np.cos(theta),-np.sin(theta)],
         [0,np.sin(theta),np.cos(theta)]
     ]
+=======
+def reshape_image_array(array, size, origin=(0,0), center=False, mode='constant'):
+	"""
+	Reshapes image array keeping the scale and size of 
+	the original image constant.
+
+	Refills pixels if needed. 
+	"""
+	origin_x = origin[0]
+	origin_y = origin[1]
+
+	orig_size_x = len(array)
+	orig_size_y = len(array[0])
+	new_size_x = size[0]
+	new_size_y = size[1]
+
+	# Differences in lengths. 
+	# These determine whether the image should be padded or cropped
+	diff_x = new_size_x - orig_size_x - origin[0]
+	diff_y = new_size_y - orig_size_y - origin[1]
+	if origin == (0,0) and diff_x == 0 and diff_y == 0:
+		# No need to do anything
+		return array
+	elif origin == (0,0) and diff_x <= 0 and diff_y <= 0:
+		# Only crop
+		return array[:orig_size_x+diff_x, :orig_size_y+diff_y]
+	else:
+		# Need to pad also
+		cropped = array[max(-origin_x,0):new_size_x-origin_x,max(-origin_y,0):new_size_y-origin_y]
+		return np.pad(cropped,((max(origin[0],0), max(diff_x,0)),(max(origin[1],0), max(diff_y,0)),(0,0)),mode=mode)[:new_size_x, :new_size_y]
+>>>>>>> 5ac17eda27fdbbc2d4346e20f467d3f0cdc43b13

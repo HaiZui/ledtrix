@@ -36,6 +36,7 @@ gallery = Gallery(screen, "examples/gallery/2", effects=effects)
 
 while True:
 	try:
+		gallery.tick()
 		if config.virtual_hardware:
 			pygame.time.wait(1)
 			for event in pygame.event.get():

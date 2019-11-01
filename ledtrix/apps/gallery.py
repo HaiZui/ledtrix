@@ -31,7 +31,7 @@ class Gallery(Module):
 
 		self.start_time = time.time()
 		
-		self.start()
+		#self.start()
 
 	def next_image(self):
 		print("Gallery.next_image")
