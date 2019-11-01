@@ -4,25 +4,16 @@ import numpy as np
 from scipy import ndimage
 from scipy.ndimage.interpolation import rotate
 
-def Color(r, g, b):
-	return r * 65536 + g * 256 + b
-
-RGBColor = collections.namedtuple('RGBColor', 'r g b')
-
 def int_to_rgb_color(c):
 	b =  c & 255
 	g = (c >> 8) & 255
 	r = (c >> 16) & 255
 	return (r, g, b)
 
-Point = collections.namedtuple('Point', 'x y')
 
 def hsv_to_color(hue, saturation, value):
 	t = colorsys.hsv_to_rgb(hue, saturation, value)
-	return Color(int(t[0] * 255), int(t[1] * 255), int(t[2] * 255))
-
-def rgb_to_int(c):
-	return Color(c.r, c.g, c.b)
+	return (int(t[0] * 255), int(t[1] * 255), int(t[2] * 255))
 
 def darken_color(color, factor): # 0 is darkest, 1 is no change
 	r,g,b=color
@@ -42,7 +33,7 @@ def blend_colors(color1, color2, progress):
 	r2 = (color2 >> 16) & 255
 
 	inverted_progress = 1.0 - progress
-	return Color(int(inverted_progress * r1 + progress * r2), int(inverted_progress * g1 + progress * g2), int(inverted_progress * b1 + progress * b2))
+	return (int(inverted_progress * r1 + progress * r2), int(inverted_progress * g1 + progress * g2), int(inverted_progress * b1 + progress * b2))
 	
 
 def color_rainbow_advance(color, step_size):
@@ -66,16 +57,6 @@ def color_rainbow_advance(color, step_size):
 	return (r, g, b)
 
 
-
-# def rotate_array(image, xy, angle):
-#     im_rot = rotate(image,angle) 
-#     org_center = (np.array(image.shape[:2][::-1])-1)/2.
-#     rot_center = (np.array(im_rot.shape[:2][::-1])-1)/2.
-#     org = xy-org_center
-#     a = np.deg2rad(angle)
-#     new = np.array([org[0]*np.cos(a) + org[1]*np.sin(a),
-#             -org[0]*np.sin(a) + org[1]*np.cos(a) ])
-#     return im_rot, new+rot_center
 
 # Sum of the min & max of (a, b, c)
 def hilo(color):
@@ -150,3 +131,37 @@ def rotate_image(img, angle, pivot):
                                                       reshape=False, prefilter=False, mode='nearest',order=4)
     rotated = imgP[pads[0][0]: -pads[0][1], pads[1][0]: -pads[1][1]] 
     return rotated
+
+
+def effect_rainbow_color_advance(pixel_array, step_size):
+    pixel_array_return = pixel_array
+    for i in range(len(pixel_array)):
+        for j in range(len(pixel_array[i])):
+            if np.any(pixel_array[i][j] != [0,0,0]):
+                pixel_array_return[i][j] = color_rainbow_advance(pixel_array[i][j],step_size=step_size)
+    return pixel_array_return
+
+def effect_complemetary_colors(pixel_array):
+    pixel_array_return = pixel_array
+    for i in range(len(pixel_array)):
+        for j in range(len(pixel_array[i])):
+            if np.any(pixel_array[i][j] != [0,0,0]):
+                pixel_array_return[i][j] = complement(pixel_array[i][j])
+    return pixel_array_return
+
+
+def do_normalise(im):
+    return -np.log(1/((1 + im)/257) - 1)
+ 
+def undo_normalise(im):
+    return (1 + 1/(np.exp(-im) + 1) * 257).astype("uint8")
+
+def rotation_matrix(theta):
+    """
+    3D rotation matrix around the X-axis by angle theta
+    """
+    return np.c_[
+        [1,0,0],
+        [0,np.cos(theta),-np.sin(theta)],
+        [0,np.sin(theta),np.cos(theta)]
+    ]

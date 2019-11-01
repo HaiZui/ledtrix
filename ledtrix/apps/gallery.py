@@ -9,16 +9,17 @@ import time
 from PIL import Image
 
 class Gallery(Module):
-	def __init__(self, screen, filepath, effects=[]):
+	def __init__(self, screen, filepath, effects=[], adjust_canvas=False):
 		super(Gallery, self).__init__(screen,effects=effects)
 
 		print("Initializing Gallery")
 		if filepath[:-1] != '/':
 			filepath = filepath + '/'
 		
-		self.filepath = filepath
 		self.screen = screen
-        
+		self.filepath = filepath
+		self.adjust_canvas = adjust_canvas
+
 		self.filenames = self.load_filenames(filepath)
 		
 		self.pos = 0
@@ -34,13 +35,18 @@ class Gallery(Module):
 
 	def next_image(self):
 		print("Gallery.next_image")
+		# Initializations
 		self.initialize_effects()
 		self.screen.initialize_effects()
-
+		# Clear any remaining pixels
+		self.screen.canvas.clear()
+		self.screen.clear()
+		
+		# Load next image array
 		self.pos = (self.pos + 1) % len(self.filenames)
 		self.load_image()
-		self.screen.canvas.clear()
-		self.screen.canvas.set_pixels(self.frames[0])
+		# Update pixels
+		self.screen.canvas.set_pixels(self.frames[0], adjust_size=self.adjust_canvas)
 		self.screen.update() 
 
 	def load_filenames(self, location):
