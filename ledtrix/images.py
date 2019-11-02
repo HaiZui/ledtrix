@@ -1,5 +1,5 @@
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageSequence
 
 def get_image_array(image_path):
     """Get a numpy array of an image so that one can access values[x][y]."""
@@ -138,3 +138,10 @@ def extract_and_resize_frames(path, resize_to=None):
         pass
 
     return all_frames
+
+def gif_to_arrays(path):
+    img = Image.open(path)
+    frames = np.array([np.array(frame.copy().convert('RGB').getdata(),dtype=np.uint8).reshape(frame.size[1],frame.size[0],3) for frame in ImageSequence.Iterator(img)])
+    # swap axes
+    frames = np.array([np.flip(np.swapaxes(frame,0,1), 1) for frame in frames] )
+    return frames
