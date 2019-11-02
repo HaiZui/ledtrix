@@ -34,18 +34,19 @@ screen_side = AbstractScreen(canvas=canvas_side, brightness=1, shape=ScreenShape
 
 screen_effects = [
 			#(EffectChangeBrighness(brightness=0.2, triggers=[trigger_blink]), {})
-			(EffectOverlay(screen_side, alpha=0.01, triggers=[trigger_blink]),{})
+			(EffectRoll(axis=(0,1,2), shift=(-1,0,0)),{})
+			,(EffectOverlay(screen_side, alpha=0.01, triggers=[trigger_blink]),{})
 			#,(EffectBlinkConstantly(frequency=0.5),{})
 			]
 
 screen_main = create_screen(canvas=canvas_main, brightness=1, effects=screen_effects)
 
 effects = [
-			(EffectDiffusion(speed=1),{})
+			#(EffectDiffusion(speed=1),{})
 			#,(EffectRoll(axis=(0,1,2), shift=(1,0,0)),{})
 		]
 
-gallery = Gallery(screen_main, "examples/gallery/2", effects=effects)
+gallery = Gallery(screen_main, "examples/gallery/2", effects=effects, adjust_canvas=True)
 
 
 
