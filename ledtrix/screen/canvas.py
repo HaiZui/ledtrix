@@ -11,5 +11,8 @@ class Canvas(object):
 	def clear(self):
 		self.pixel.fill(0)
 
-	def set_pixels(self, array, pos=(0,0)):
-		self.pixel = add_image_arrays(array_1=self.pixel, array_2=array, pos=pos)
+	def set_pixels(self, array, pos=(0,0), adjust_size=False):
+		if adjust_size is False:
+			self.pixel = add_image_arrays(array_1=self.pixel, array_2=array, pos=pos)
+		else:
+			self.pixel = array

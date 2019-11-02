@@ -2,8 +2,7 @@ import time
 import numpy as np
 from PIL import Image
 from ledtrix.effects import Effect
-from ledtrix.effects.coloreffects import effect_complemetary_colors
-from ledtrix.helpers import rotate_image, reshape_image_array
+from ledtrix.helpers import rotate_image, reshape_image_array, effect_complemetary_colors
 
 class EffectOverlay(Effect):
     def __init__(self, screen_other, alpha=0, triggers=None):
@@ -76,20 +75,13 @@ class EffectBlinkConstantly():
 class EffectComplementaryColor():
     def __init__(self, constant_color=True):
         self.constant_color = constant_color
-        # Initialize
-        self.is_complement = 0
 
     def initialize(self):
-        self.is_complement = 0
+        pass
 
     def process(self, screen):
-        if self.is_complement == 0:
-            screen.pixel = effect_complemetary_colors(screen.pixel)
-            if self.constant_color is True:
-                self.is_complement = 1
-
-    def trigger(self, screen):
-        self.is_complement = 0
+        screen.pixel = effect_complemetary_colors(screen.pixel)
+        
         
 
     
@@ -123,6 +115,9 @@ class EffectRotate(Effect):
         # Debug
         # Image.fromarray(rotated.astype(np.uint8)).save('{}.png'.format(self.angle))
         screen.pixel = rotated
+
+# class EffectChangeHue:
+#     def __init__(self,)
     
 
 class EffectRoll(Effect):

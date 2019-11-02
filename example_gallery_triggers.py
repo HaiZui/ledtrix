@@ -13,31 +13,28 @@ from ledtrix.effects.screeneffects import EffectBlinkConstantly, EffectComplemen
 from ledtrix.triggers.triggers import TriggerChangeDirection, TriggerExponentialDecay, TriggerUpAndDown
 
 trigger_change_rotation_direction = TriggerChangeDirection()
-trigger_blink = TriggerUpAndDown(lifetime=0.2, max_multiplier=5)
+trigger_blink = TriggerUpAndDown(lifetime=0.2, max_multiplier=10)
 
 canvas = create_canvas(30, 40)
 screen_effects = [
 			#(EffectBlinkConstantly(frequency=1),{})
-			#(EffectComplementaryColor(constant_color=True),{})
-			#(EffectExponentialFade(lifetime=100),{})
-			(EffectRotate(speed=10, triggers=[trigger_change_rotation_direction]),{})
-			, (EffectChangeBrighness(brightness=0.2, triggers=[trigger_blink]), {})
+			#(EffectRotate(speed=10, triggers=[trigger_change_rotation_direction]),{})
+			(EffectChangeBrighness(brightness=0.1, triggers=[trigger_blink]), {})
+			,(EffectComplementaryColor(constant_color=False),{})
 			]
 
-screen = create_screen(canvas=canvas, brightness=0.2, effects=screen_effects)
+screen = create_screen(canvas=canvas, brightness=0.1, effects=screen_effects)
 screen.shape.x0 = 0
-screen.shape.y0 = 0
+screen.shape.y0 = 15
 
-effects = [
+gallery_effects = [
 			#(EffectRainbowTransformation(step_size=20),{})
-			#(EffectRotate(speed=10),{})
-			(EffectDiffusion(speed=1),{})
-			,(EffectRoll(axis=(0,1,2), shift=(1,0,0)),{})
-			#,(EffectRainbowTransformation(step_size=20),{})
-			#,(EffectRainbowTransformation(step_size=20),{})
+			#(EffectColorTransformation(angle=10),{})
+			#(EffectDiffusion(speed=2),{})
+			(EffectRoll(axis=(0,1,2), shift=(0,1,0), randomize_direction=True),{})
 		]
 
-gallery = Gallery(screen, "examples/gallery/2", effects=effects)
+gallery = Gallery(screen, "examples/gallery/2", effects=gallery_effects, adjust_canvas=True)
 
 
 from pygame.locals import QUIT, KEYDOWN, KEYUP

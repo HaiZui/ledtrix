@@ -33,14 +33,23 @@ class EffectRotate(Effect):
 
 
 class EffectRoll(Effect):
-    def __init__(self, axis, shift):
+    def __init__(self, axis, shift, randomize_direction=False):
         # Use last frame as a reference
         super().__init__()
         self.axis = axis
         self.shift = shift
+        self.randomize_direction = randomize_direction
+        self.speed = shift[0] + shift[1]
+        self.shift_z = shift[2]
 
     def initialize(self):
-        pass
+        if self.randomize_direction is True:
+            speed_x = np.random.choice((-1,0,1)) * self.speed
+            speed_y = np.random.choice((-1,0,1)) * self.speed
+            print((speed_x, speed_y))
+            self.shift = (speed_x, speed_y, self.shift_z)
+        else:
+            pass
 
     def process(self, pixel_array):
         return np.roll(pixel_array, axis=self.axis, shift=self.shift)
