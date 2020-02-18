@@ -122,7 +122,6 @@ class EffectRotate(Effect):
 
 class EffectRoll(Effect):
     def __init__(self, axis, shift):
-        # Use last frame as a reference
         super().__init__()
         self.axis = axis
         self.shift = shift
@@ -141,3 +140,19 @@ class EffectRoll(Effect):
         self.shift_y += self.shift[1]
         self.shift_z += self.shift[2]
         screen.pixel = np.roll(screen.pixel, axis=self.axis, shift=[self.shift_x, self.shift_y, self.shift_z])
+
+class EffectFlipAxis(Effect):
+    def __init__(self, axis, triggers):
+        super(EffectFlipAxis, self).__init__(triggers=triggers)
+        self.axis = axis
+        # Initialize
+        self.direction = 1
+
+    def initialize(self):
+        self.direction = 1
+
+    def process(self, screen):
+        # Check triggers
+        self.process_triggers()
+        if self.direction == 1:
+            screen.pixel = np.flip(screen.pixel, axis=self.axis)
