@@ -12,30 +12,32 @@ from PIL import Image
 
 from ledtrix.effects.coloreffects import EffectColorTransformation, EffectRainbowTransformation
 from ledtrix.effects.movingeffects import  EffectDiffusion
-from ledtrix.effects.screeneffects import EffectRoll, EffectBlinkConstantly, EffectComplementaryColor, EffectRotate, EffectChangeBrighness, EffectOverlay
+from ledtrix.effects.screeneffects import EffectRoll, EffectBlinkConstantly, EffectComplementaryColor, EffectRotate, EffectChangeBrighness, EffectOverlay, EffectFlipAxis
 from ledtrix.triggers.triggers import TriggerChangeDirection, TriggerExponentialDecay, TriggerUpAndDown
 
 tick_interval = 0.001
 trigger_change_rotation_direction = TriggerChangeDirection()
+trigger_flip = TriggerChangeDirection()
 trigger_blink = TriggerUpAndDown(lifetime=0.5, max_multiplier=100)
 
 canvas_main = create_canvas(30, 40)
 canvas_side = create_canvas(30, 40)
 
-canvas_side.set_pixels(images.get_image_array('examples/pictures/guy.png'))
+#canvas_side.set_pixels(images.get_image_array('examples/pictures/guy.png'))
 
 screen_effects_side = [
-			(EffectRotate(speed=10, pivot=[15,15]),{})
+			(EffectRotate(speed=1, pivot=[15,15]),{})
 			,(EffectRoll(axis=(0,1,2), shift=(1,0,0)),{})
 			#,(EffectBlinkConstantly(frequency=0.5),{})
 				]
 
-screen_side = AbstractScreen(canvas=canvas_side, brightness=1, shape=ScreenShapeRectangle(30,30,0,0), effects=screen_effects_side)
+screen_side = create_screen(canvas=canvas_side, brightness=1, effects=screen_effects_side, abstract=True)
 
 screen_effects = [
 			#(EffectChangeBrighness(brightness=0.2, triggers=[trigger_blink]), {})
 			(EffectRoll(axis=(0,1,2), shift=(-1,0,0)),{})
 			,(EffectOverlay(screen_side, alpha=0.01, triggers=[trigger_blink]),{})
+			,(EffectFlipAxis(axis=(0,1), triggers=[trigger_flip]),{})
 			#,(EffectBlinkConstantly(frequency=0.5),{})
 			]
 
@@ -45,8 +47,10 @@ effects = [
 			#(EffectDiffusion(speed=1),{})
 			#,(EffectRoll(axis=(0,1,2), shift=(1,0,0)),{})
 		]
-
-gallery = Gallery(screen_main, "examples/gallery/2", effects=effects, adjust_canvas=True)
+print(screen_side)
+print(screen_main)
+gallery = Gallery(screen_main, "examples/gallery/1", effects=effects, adjust_canvas=True)
+gallery2 = Gallery(screen_side, "examples/gallery/2", effects=effects, adjust_canvas=False)
 
 
 
@@ -60,6 +64,7 @@ while going:
 	time.sleep(tick_interval)
 	screen_side.update()
 	gallery.tick()
+	gallery2.tick()
 	try:
 		events = event_get()
 		for e in events:
@@ -69,6 +74,7 @@ while going:
 			if e.type in [KEYUP]:
 				trigger_change_rotation_direction.trigger()
 				trigger_blink.trigger()
+				trigger_flip.trigger()
 		
 	except KeyboardInterrupt:
 		screen_main.clear()
