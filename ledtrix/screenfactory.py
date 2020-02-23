@@ -15,4 +15,4 @@ def create_screen(canvas=None, brightness=1, effects=[], abstract=False):
 		return VirtualScreen(canvas=canvas,width=config.screen_w,height=config.screen_h,brightness=brightness, effects=effects)
 	else:
 		from ledtrix.screen.screen import Screen
-		return Screen(canvas=cavnas, width=config.screen_w,height=config.screen_h, effects=effects)
+		return Screen(canvas=canvas, width=config.screen_w,height=config.screen_h, effects=effects)
