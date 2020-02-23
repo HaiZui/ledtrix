@@ -1,12 +1,12 @@
 import pygame
 import config
-from ledtrix.screen.abstractscreen import AbstractScreen
+from ledtrix.screen.abstractscreen import AbstractScreen, ScreenShapeRectangle
 from ledtrix.helpers import darken_color
 
 instance = None
 
 class Screen(AbstractScreen):
-	def __init__(self, width = 16, height = 16, led_pin = 18, led_freq_hz = 800000, led_dma = 5, led_invert = False, led_brightness = 0.5, effects=[]):
+	def __init__(self, canvas, width = 16, height = 16, led_pin = 18, led_freq_hz = 800000, led_dma = 5, led_invert = False, led_brightness = 0.5, effects=[]):
 		super(Screen, self).__init__(canvas=canvas, shape=ScreenShapeRectangle(width, height), brightness=brightness, effects=effects)
 		import neopixel
 		import board
@@ -16,15 +16,15 @@ class Screen(AbstractScreen):
 		instance = self	
 	
 	def update(self):
-		print("creating screen sized x={}, y={}".format(self.width, self.height))	
+		print("creating screen sized x={}, y={}".format(self.shape.width, self.shape.height))	
 		print("Image size: ", len(self.pixel), len(self.pixel[0]))
-		for y in range(self.height):
-			for x in range(self.width):
+		for y in range(self.shape.height):
+			for x in range(self.shape.width):
 				if x <= len(self.pixel)-1 and y <= len(self.pixel[0]) -1:
 					color = darken_color(self.pixel[x][y], self.brightness)
 					if y % 2 == 0:
-						self.strip[y * self.width + x] = color
-					else: self.strip[y * self.width + self.width - 1 - x] = color
+						self.strip[y * self.shape.width + x] = color
+					else: self.strip[y * self.shape.width + self.shape.width - 1 - x] = color
 		self.strip.show()
 
 	def update_brightness(self):
