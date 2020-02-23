@@ -7,7 +7,7 @@ instance = None
 
 class Screen(AbstractScreen):
 	def __init__(self, width = 16, height = 16, led_pin = 18, led_freq_hz = 800000, led_dma = 5, led_invert = False, led_brightness = 0.5, effects=[]):
-		super(Screen, self).__init__(width, height)
+		super(Screen, self).__init__(canvas=canvas, shape=ScreenShapeRectangle(width, height), brightness=brightness, effects=effects)
 		import neopixel
 		import board
 		self.strip = neopixel.NeoPixel(board.D18, width * height, auto_write=False, brightness=led_brightness)
