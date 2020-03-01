@@ -1,38 +1,33 @@
 import pygame
 import collections
-from ledtrix.screen.abstractscreen import AbstractScreen, ScreenShapeRectangle
+from ledtrix.screen.abstractscreen import AbstractScreen
+from ledtrix.screen.shapes import ScreenShapeRectangle
 from ledtrix.helpers import darken_color
 from PIL import Image
 
 class VirtualScreen(AbstractScreen):
-	def __init__(self, canvas=None, width = 30, height = 20, brightness=1, effects=[]):		
-		print(effects)
-		super(VirtualScreen, self).__init__(canvas=canvas, shape=ScreenShapeRectangle(width, height), brightness=brightness, effects=effects)
-		self.width = width
-		self.height = height
-		self.pixel_size = 30
-		print(self.effects)
+	def __init__(self, canvas, shape, brightness=1, effects=[], pixel_size=15):	
+		super(VirtualScreen, self).__init__(canvas=canvas, shape=shape, brightness=brightness, effects=effects)
+		self.pixel_size = pixel_size
+		# Initialize pygame window
 		pygame.display.init()
-		self.screen = pygame.display.set_mode([width * self.pixel_size, height * self.pixel_size], 0)
+		self.screen = pygame.display.set_mode([canvas.width * self.pixel_size, canvas.height * self.pixel_size], 0)
 		self.surface = pygame.Surface(self.screen.get_size())	
 				
 	def update(self):
-		self._crop_canvas()
 		self.process_effects()
-		for x in range(len(self.pixel)):
-			for y in range(len(self.pixel[x])):
-				if x <= self.width and y <= self.height:
-					x_coor = x
-					y_coor = self.height - y
-					color = darken_color(tuple(self.pixel[x][y]),factor=self.brightness)
-					pygame.draw.rect(self.surface, color, (x_coor * self.pixel_size, (y_coor - 1) * self.pixel_size, self.pixel_size, self.pixel_size))
+		# Iterate over pixels and draw them according to mapping
+		for pos, color in self:
+			x_coor = pos[0]
+			y_coor = pos[1]
+			pygame.draw.rect(self.surface, color, (x_coor * self.pixel_size, y_coor * self.pixel_size, self.pixel_size, self.pixel_size))
 
-		self.screen.blit(self.surface, (0, 0))
+		# Flip vertically (pygame defines origin at the top left corner, we want to transform it to lower left corner)
+		self.screen.blit(pygame.transform.flip(self.surface, False, True), (0, 0))
 		pygame.display.flip()
-		pygame.display.update()
 		
 		
-	def process_effects(self):
-		for effect, kwargs in self.effects:
-			effect.process(self, **kwargs)
+	# def process_effects(self):
+	# 	for effect, kwargs in self.effects:
+	# 		effect.process(self, **kwargs)
 

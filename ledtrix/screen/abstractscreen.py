@@ -1,46 +1,23 @@
-import ledtrix.helpers as helpers
-import time
-import copy
-import numpy as np
-from PIL import Image
-
-class ScreenShapeRectangle:
-	def __init__(self, width, height,x0=0, y0=0):
-		self.width = width
-		self.height = height
-		self.x0 = x0
-		self.y0 = y0
-
-
-class ScreenShapeCircle:
-	def __init__(self, center, radius):
-		self.center = center
-		self.radius = radius
 
 class AbstractScreen(object):
-	def __init__(self, shape, canvas, scale=1, brightness=1, effects=[]):
+	def __init__(self, shape, canvas, brightness=1, effects=[]):
+		"""Abstract screen class
+		
+		Arguments
+		---------
+		shape:
+		"""
 		self.shape = shape
 		self.canvas = canvas
-		self.scale = scale
 		self.brightness = min(brightness, 1)
 		self.effects = effects
-		self._crop_canvas()
 
-	def _crop_canvas(self):
-		width = self.shape.width
-		height = self.shape.height
-		x0 = self.shape.x0
-		y0 = self.shape.y0
-		#self.pixel = np.roll(self.canvas.pixel, axis=(0,1,2), shift=(-x0,-y0,0))[:width,:height]
-		self.pixel = helpers.reshape_image_array(self.canvas.pixel, (width, height), origin=(x0,y0)) * self.brightness
-
-	def clear(self, color = (0,0,0)):
-		for x in range(len(self.pixel)):
-			for y in range(len(self.pixel[0])):				
-				self.pixel[x][y] = color
+	def __iter__(self):
+		"""Iterates through pixels and returns absolute coordinate and color value
+		"""
+		return AbstractScreenIterator(self)
 
 	def update(self):
-		self._crop_canvas()
 		self.process_effects()
 
 	def initialize_effects(self):
@@ -54,3 +31,19 @@ class AbstractScreen(object):
 	def process_triggers(self):
 		for effect, kwargs in self.effects:
 			effect.trigger(self, **kwargs)
+
+class AbstractScreenIterator:
+	def __init__(self, screen):
+		self._screen = screen
+		self._index = 0
+
+	def __next__(self):
+		"""Iterates through pixels and returns absolute coordinate and color value
+		"""
+		if self._index < self._screen.shape.length:
+			coordinate = self._screen.shape.pixel_mapping[self._index]
+			value = self._screen.canvas[coordinate] * self._screen.brightness
+			self._index += 1
+			return coordinate, value
+		# End of Iteration
+		raise StopIteration

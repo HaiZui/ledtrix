@@ -79,22 +79,27 @@ def complement(color):
 	return tuple(k - u for u in (r, g, b))
 
 
-def add_image_arrays(array_1, array_2, pos=(0,0)):
+def add_image_arrays(array_1, array_2, pos=(0,0), opacity=1):
 	"""
-	Add two matrices of different sizes in place, offset by xy coordinates
+	Add two matrices of different sizes in place, offset by xy coordinates 
+	and average color values
+	
 	Usage:
 		- array_1: base matrix
 		- array_2: add this matrix to array_1
 		- pos: tuple (x,y) containing coordinates
+		- opacity: opacity of the second image, 0=Fully transparent, 1=Full opacity
 	
 	Arguments
 	---------
-	array_1 : numpy.array
+	array_1: numpy.array
 		Base array
-	array_2 : numpy.array
+	array_2: numpy.array
 		Second array
-	pos : tuple(int, int)
+	pos: tuple(int, int)
 		xy coordination of the offset
+	opacity: float
+		Opacity of the second image
 	"""
 	array_ret = array_1.copy()
 
@@ -106,8 +111,13 @@ def add_image_arrays(array_1, array_2, pos=(0,0)):
 		return array_1
 
 	xmax, ymax = min(x + size_x_2, size_x_1), min(y + size_y_2, size_y_1)
-	
-	array_ret[y:ymax, x:xmax] += array_2[:size_y_1-y, :size_x_1-x]
+
+	# All pixels which are not black are treated
+	mask = (array_2[:size_y_1-y, :size_x_1-x]  !=(0,0,0)).any(axis=2,keepdims=1)*1
+
+	array_ret[y:ymax, x:xmax] = (1-mask)*array_ret[y:ymax, x:xmax] + \
+								mask * np.sqrt((array_ret[y:ymax, x:xmax] **2 * (1-opacity)  
+									   + array_2[:size_y_1-y, :size_x_1-x] **2 * opacity))
 	return array_ret
 
 
