@@ -16,8 +16,8 @@ class Clock(Module):
 		
 	
 	def draw_time(self, color, colon = True):
-		height = self.screen.height
-		width = self.screen.width
+		height = self.screen.shape.height
+		width = self.screen.shape.width
 
 		now = datetime.datetime.now()
 		hour = "{:02d}".format(now.hour)
