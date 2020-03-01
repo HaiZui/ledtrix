@@ -36,3 +36,5 @@ class Canvas(object):
 			self.pixel = array
 			self.height = array.shape[0]
 			self.width = array.shape[1]
+
+		

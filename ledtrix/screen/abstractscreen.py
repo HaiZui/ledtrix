@@ -1,3 +1,4 @@
+import numpy as np
 
 class AbstractScreen(object):
 	def __init__(self, shape, canvas, brightness=1, effects=[]):
@@ -9,6 +10,7 @@ class AbstractScreen(object):
 		"""
 		self.shape = shape
 		self.canvas = canvas
+		canvas.add_screen(self)
 		self.brightness = min(brightness, 1)
 		self.effects = effects
 
@@ -32,6 +34,9 @@ class AbstractScreen(object):
 		for effect, kwargs in self.effects:
 			effect.trigger(self, **kwargs)
 
+	def adjust_pixel_mapping(self):
+		self.shape.pixel_mapping_absolute = self.shape.pixel_mapping_absolute % np.array([self.canvas.width, self.canvas.height])
+
 class AbstractScreenIterator:
 	def __init__(self, screen):
 		self._screen = screen
@@ -41,9 +46,10 @@ class AbstractScreenIterator:
 		"""Iterates through pixels and returns absolute coordinate and color value
 		"""
 		if self._index < self._screen.shape.length:
-			coordinate = self._screen.shape.pixel_mapping[self._index]
-			value = self._screen.canvas[coordinate] * self._screen.brightness
+			coordinate_relative = self._screen.shape.pixel_mapping_relative[self._index]
+			coordinate_absolute = self._screen.shape.pixel_mapping_absolute[self._index]
+			value = self._screen.canvas[coordinate_absolute] * self._screen.brightness
 			self._index += 1
-			return coordinate, value
+			return coordinate_relative, coordinate_absolute, value
 		# End of Iteration
 		raise StopIteration
